@@ -12,8 +12,10 @@ def load_images(dir,limit=100):
                 image_path = os.path.join(root, file)
                 image = np.reshape(cv2.imread(image_path, cv2.IMREAD_GRAYSCALE),(-1,))
                 
+                print(image.shape)
                 images.append(image)
+                
                 labels.append(root.split("/")[-1])
     
-    return np.concatenate(images,axis=0), labels
+    return np.vstack(images), labels
 
