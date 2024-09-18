@@ -18,7 +18,8 @@ svms    = {}
 results = {}
 
 for kernal in KERNALS:
-    svms[kernal] = make_pipeline(StandardScaler(), SVC(gamma='auto', kernel=kernal))
+    print(kernal)
+    svms[kernal] = make_pipeline(StandardScaler(), SVC(gamma='auto', kernel=kernal,verbose=2))
     svms[kernal] = svms[kernal].fit(X_train,y_train)
     results[kernal]= svms[kernal].predict(X_test)
     
