@@ -20,7 +20,7 @@ def save_conf_mat(y_true, y_pred, name):
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
     plt.title(f'Confusion Matrix: {name}')
-    plt.xlabel('Predicted')   
+    plt.xlabel('Predicted') 
 
     plt.ylabel('Actual')
 
