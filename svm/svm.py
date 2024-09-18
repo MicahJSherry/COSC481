@@ -29,7 +29,7 @@ def save_conf_mat(y_true, y_pred, name):
     plt.clf()
 
 
-KERNALS = ['rbf']#, 'linear', 'poly',  'sigmoid']
+KERNALS = ['rbf', 'linear', 'poly',  'sigmoid']
 num_images = 1000
 X, y = load_images("./spark22",num_images)
 
