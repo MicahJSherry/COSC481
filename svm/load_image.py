@@ -1,6 +1,6 @@
 import os 
 import cv2
-import np
+import numpy as np
 
 
 def load_images(dir,limit=100):
@@ -17,4 +17,3 @@ def load_images(dir,limit=100):
     
     return images, labels
 
-print(load_images("./spark22"))
