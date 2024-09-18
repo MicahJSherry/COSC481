@@ -6,7 +6,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from load_image import load_images
-from sklearn.decomposition import TSNE
+from sklearn.manifold import TSNE
 
 KERNALS = ['rbf']#, 'linear', 'poly',  'sigmoid']
 num_images = 10

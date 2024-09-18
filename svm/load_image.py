@@ -15,5 +15,5 @@ def load_images(dir,limit=100):
                 images.append(image)
                 labels.append(root.split("/")[-1])
     
-    return images, labels
+    return np.concatenate(images,axis=0), labels
 
