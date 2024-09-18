@@ -27,26 +27,6 @@ def save_conf_mat(y_true, y_pred, name):
     # Save the image
     plt.savefig(f'{name}_confusion_matrix.png')
     plt.clf()
-def save_roc(y_true,y_pred,name):
-    # Assuming you have your true labels (y_true) and predicted probabilities (y_score)
-    fpr, tpr, thresholds = roc_curve(y_true, y_score)
-    roc_auc = auc(fpr, tpr)
-
-    # Plot the ROC curve
-    plt.figure()
-    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
-    plt.plot([0, 1], [0, 1], color='navy', lw=2,   
-              linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic: {name}')
-    plt.legend(loc="lower right")
-
-    # Save the plot
-    plt.savefig(f'{name}_roc_curve.png')
-    plt.clf()
 
 
 KERNALS = ['rbf']#, 'linear', 'poly',  'sigmoid']
@@ -71,7 +51,6 @@ for kernal in KERNALS:
             # Write some text to the file
             f.write(str(metrics[kernal]))
 
-    save_roc(y_test, results[kernal], kernal)
     save_conf_mat(y_test, results[kernal], kernal)
 
 
