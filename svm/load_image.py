@@ -1,20 +1,20 @@
 import os 
 import cv2
+import np
 
 
-
-def load_images(dir):
+def load_images(dir,limit=100):
     images = []
     labels = []
     for root, dirs, files in os.walk(dir):
-        for file in files[0:100]:
+        for file in files[0:limit]:
             if file.endswith('.jpg'):
                 image_path = os.path.join(root, file)
-                image = cv2.imread(image_path, mode=cv2.IMREAD_GRAYSCALE)
-                print(type(image))
+                image = np.reshape(cv2.imread(image_path, cv2.IMREAD_GRAYSCALE),(-1,))
+                
                 images.append(image)
                 labels.append(root.split("/")[-1])
     
-    return image, labels
+    return images, labels
 
 print(load_images("./spark22"))
