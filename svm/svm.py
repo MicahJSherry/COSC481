@@ -6,10 +6,14 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from load_image import load_images
+from sklearn.decomposition import TSNE
 
 KERNALS = ['rbf']#, 'linear', 'poly',  'sigmoid']
-num_images = 100
+num_images = 10
 X, y = load_images("./spark22",num_images)
+tsne = TSNE(n_components=256)
+
+X = tsne.fit_transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
