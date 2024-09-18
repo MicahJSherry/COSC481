@@ -10,10 +10,12 @@ def load_images(dir,limit=100):
         for file in files[0:limit]:
             if file.endswith('.jpg'):
                 image_path = os.path.join(root, file)
-                image = np.reshape(cv2.imread(image_path, cv2.IMREAD_GRAYSCALE),(-1,))
+                image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
                 
                 print(image.shape)
-                images.append(image)
+                image = cv2.resize(image, None, fx=0.5, fy=0.5)
+
+                images.append(np.reshape(image,(-1,)))
                 
                 labels.append(root.split("/")[-1])
     

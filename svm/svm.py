@@ -17,7 +17,7 @@ num_images = 10
 X, y = load_images("./spark22",num_images)
 tsne = TSNE(n_components=3,n_jobs=20)
 
-X = tsne.fit_transform(X)
+#X = tsne.fit_transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
