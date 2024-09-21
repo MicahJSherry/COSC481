@@ -7,7 +7,8 @@ from sklearn.metrics import confusion_matrix,  roc_curve, auc
 from sklearn.metrics import classification_report
 
 from load_image import load_images
-from sklearn.manifold import TSNE, PCA
+from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
 
 import numpy as np
 
