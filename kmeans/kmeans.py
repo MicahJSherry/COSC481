@@ -35,4 +35,5 @@ k = KMeans(n_clusters=CLUSTERS)
 k.fit(X)
 labels = k.labels_ 
 for m, r in reduced.items():
-    plot_and_save(r[:,0], r[:,1], labels, m)
+    plot_and_save(r[:,0], r[:,1], labels=labels, title=m+"_kmeans")
+    plot_and_save(r[:,0], r[:,1], labels=y, title=m+"_class")
