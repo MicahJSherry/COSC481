@@ -21,7 +21,7 @@ def plot_and_save(x, y, labels,title):
     plt.savefig(title+".png")
     plt.clf()
 
-num_images = 1000
+num_images = 100
 X, y = load_images("./spark22",num_images)
 
 dim_reduction= { #"tsne_3d" : TSNE(n_components=3), 
@@ -33,6 +33,6 @@ reduced = { d: dim_reduction[d].fit_transform(X) for d in dim_reduction.keys() }
 
 k = KMeans(n_clusters=CLUSTERS)
 k.fit(X)
-labels = k.labels 
+labels = k.labels_ 
 for m, r in reduced.items():
     plot_and_save(r[:,0], r[:,1], labels, m)
