@@ -4,6 +4,8 @@ import numpy as np
 
 
 def load_images(dir,limit=100):
+    model = cv2.dnn.readNetFromCaffe('model.prototxt', 'model.caffemodel')
+    
     images = []
     labels = []
     for root, dirs, files in os.walk(dir):
@@ -12,10 +14,14 @@ def load_images(dir,limit=100):
                 image_path = os.path.join(root, file)
                 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
                 
-                image = cv2.resize(image, None, fx=0.03125, fy=0.03125)
-                print(image.shape)
+                image = cv2.resize(image,(224, 224))
 
-                images.append(np.reshape(image,(-1,)))
+                
+                blob = cv2.dnn.blobFromImage(image, 1.0, (224, 224), (104.0, 117.0, 123.0))
+                model.setInput(blob)
+                features = model.forward()
+                embedding = features.flatten()
+                images.append(embedding)
                 
                 labels.append(root.split("/")[-1])
     
