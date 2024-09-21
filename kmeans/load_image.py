@@ -2,6 +2,8 @@ import os
 import cv2
 import numpy as np
 
+from imgbeddings import imgbeddings
+ibed = imgbeddings()
 
 def load_images(dir,limit=100):
     model = cv2.dnn.readNetFromCaffe('model.prototxt', 'model.caffemodel')
@@ -16,12 +18,9 @@ def load_images(dir,limit=100):
                 
                 image = cv2.resize(image,(224, 224))
 
-                
-                blob = cv2.dnn.blobFromImage(image, 1.0, (224, 224), (104.0, 117.0, 123.0))
-                model.setInput(blob)
-                features = model.forward()
-                embedding = features.flatten()
-                images.append(embedding)
+                embedding = ibed.to_embeddings(image)
+                print(embedding.shape)
+                images.append(images)
                 
                 labels.append(root.split("/")[-1])
     
