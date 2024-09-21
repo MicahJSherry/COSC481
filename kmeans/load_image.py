@@ -12,7 +12,7 @@ def load_images(dir,limit=100):
                 image_path = os.path.join(root, file)
                 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
                 
-                image = cv2.resize(image, None, fx=0.0625, fy=0.0625)
+                image = cv2.resize(image, None, fx=0.03125, fy=0.03125)
                 print(image.shape)
 
                 images.append(np.reshape(image,(-1,)))
