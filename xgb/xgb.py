@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.metrics import confusion_matrix,  roc_curve, auc 
+from sklearn.metrics import confusion_matrix 
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler
 
@@ -11,7 +11,7 @@ from load_image import load_images
 
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
-
+from sklearn.preprocessing import LabelEncoder
 import numpy as np
 
 from xgboost import XGBClassifier
@@ -35,6 +35,8 @@ def save_conf_mat(y_true, y_pred, name):
 
 num_images = 1000
 X, y = load_images("./spark22/train",num_images)
+le = LabelEncoder()
+y = le.fit_transform(y)
 
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
