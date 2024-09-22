@@ -13,8 +13,9 @@ def load_images(dir,limit=100):
                 image_path = os.path.join(root, file)
                 paths.append(image_path)
                 labels.append(root.split("/")[-1])
-    
+                
     ibed = imgbeddings()
     emb = ibed.to_embeddings(paths)
-    return np.vstack(emb), labels
+    emb = ibed.pca_fit(emb, out_dim=64)
+    return emb, labels
 

@@ -27,6 +27,8 @@ le = LabelEncoder()
 num_images = 100
 X, y = load_images("./spark22",num_images)
 y = le.fit_transform(y)
+
+
 dim_reduction= { #"tsne_3d" : TSNE(n_components=3), 
                  "tsne_2d" : TSNE(n_components=2), 
                  #"pca_3d"  : PCA(n_components=2),
