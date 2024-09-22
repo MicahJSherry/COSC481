@@ -16,6 +16,7 @@ def load_images(dir,limit=100):
                 
     ibed = imgbeddings()
     emb = ibed.to_embeddings(paths)
-    emb = ibed.pca_fit(emb, out_dim=64)
+    ibed.pca_fit(emb, out_dim=64)
+    emb = ibed.pca_transform(emb)
     return emb, labels
 
