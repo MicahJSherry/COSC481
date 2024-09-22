@@ -1,22 +1,25 @@
 from sklearn.cluster import KMeans
 import cv2
+import os
+import numpy as np
 
+image_paths = dir_list = os.listdir("images")
+print(image_paths)
 
-image_path = "spark22/test/cheops/cheops_img03816.jpg"
+for image_path in image_paths:
 
+    image = cv2.imread("images/"+image_path)
+    original_shape = image.shape
+    
+    
+    image = image.reshape(-1, image.shape[-1])
 
-image = cv2.imread(image_path)
-original_shape = image.shape
-image = image.reshape(-1, image.shape[-1])
-print(original_shape)
-print(image.shape)
-
-kmeans = KMeans(n_clusters=2, n_init=100)
-kmeans.fit(image)
-
-image = kmeans.cluster_centers_[kmeans.labels_]
-image = image.reshape(original_shape)
-print(image)
-cv2.imwrite("color.png",image.astype("uint8") )
+    kmeans = KMeans(n_clusters=5, n_init=10)
+    kmeans.fit(image)
+    centers = kmeans.cluster_centers_
+    
+    image = centers[kmeans.labels_]
+    image = image.reshape(original_shape)
+    cv2.imwrite("segmented_images/"+image_path,image.astype("uint8") )
 
 
