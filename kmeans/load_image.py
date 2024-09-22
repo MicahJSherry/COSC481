@@ -12,12 +12,9 @@ def load_images(dir,limit=100):
             if file.endswith('.jpg'):
                 image_path = os.path.join(root, file)
                 paths.append(image_path)
-
-    ibed = imgbeddings()
-
-    emb = ibed.to_embeddings(paths)
-
-                
+                labels.append(root.split("/")[-1])
     
+    ibed = imgbeddings()
+    emb = ibed.to_embeddings(paths)
     return np.vstack(emb), labels
 
