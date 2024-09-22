@@ -2,7 +2,7 @@ from sklearn.cluster import KMeans
 import cv2
 
 
-image_path = "dog.png"
+image_path = "spark22/test/cheops/cheops_img03816.jpg"
 
 
 image = cv2.imread(image_path)
@@ -11,7 +11,7 @@ image = image.reshape(-1, image.shape[-1])
 print(original_shape)
 print(image.shape)
 
-kmeans = KMeans(n_clusters=50, n_init=100)
+kmeans = KMeans(n_clusters=2, n_init=100)
 kmeans.fit(image)
 
 image = kmeans.cluster_centers_[kmeans.labels_]
