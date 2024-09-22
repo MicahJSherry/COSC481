@@ -44,12 +44,17 @@ X = scaler.fit_transform(X)
 pca = PCA(n_components=16)
 X_pca = pca.fit_transform(X)
 
-tsne = TSNE(n_components=2)
-X_tsne = tsne.fit_transform(X)
+print("starting Tsne")
+tsne = TSNE(n_components=16, method="exact", n_iter=250, verbose=2)
+X_tsne = tsne.fit_transform(X_pca)
 
-Xs = {"X": X, "X_pca": X_pca, "X_tsne": X_tsne}
+Xs = {
+       # "X": X,
+       # "X_pca": X_pca,
+        "X_tsne": X_tsne}
 
 for n, x in Xs.items():
+    print(n)
     xgb = XGBClassifier()
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
