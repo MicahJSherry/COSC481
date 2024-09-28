@@ -1,4 +1,3 @@
-from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -31,8 +30,6 @@ def save_conf_mat(y_true, y_pred, name):
     plt.savefig(f'{name}_confusion_matrix.png')
     plt.clf()
 
-
-
 num_images = 1000
 X, y = load_images("./spark22/train",num_images)
 le = LabelEncoder()
@@ -49,8 +46,8 @@ tsne = TSNE(n_components=16, method="exact", n_iter=250, verbose=2)
 X_tsne = tsne.fit_transform(X_pca)
 
 Xs = {
-       # "X": X,
-       # "X_pca": X_pca,
+        "X": X,
+        "X_pca": X_pca,
         "X_tsne": X_tsne}
 
 for n, x in Xs.items():
@@ -68,8 +65,6 @@ for n, x in Xs.items():
         f.write(str(metrics))
 
     save_conf_mat(y_test, y_pred=y_pred, name=f"xgb_{n}")
-
-# Train the classifier
 
 
 
