@@ -5,14 +5,16 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix 
 from sklearn.metrics import classification_report
 
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 from load_image import load_images
-from sklearn.manifold import TSNE
 
 import numpy as np
 
 import tensorflow as tf
+from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.models import Sequential
 
 def save_conf_mat(y_true, y_pred, name):
     cm = confusion_matrix(y_true, y_pred)
@@ -29,19 +31,32 @@ def save_conf_mat(y_true, y_pred, name):
     plt.savefig(f'{name}_confusion_matrix.png')
     plt.clf()
 
-models = {
-    "vgg16": tf.keras.applications.VGG16(),
-    "vgg19": tf.keras.applications.VGG19(),
-    }
 
-print(models['vgg16'].summary())
 
 
 num_images = 1000
 X, y = load_images("./spark22/train",num_images)
-
-le = LabelEncoder()
+y= np.array(y)
+y=y.reshape(-1,1)
+print(X.shape)
+le = OneHotEncoder(sparse_output=False)
 y = le.fit_transform(y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+num_classes = 11
+
+model = Sequential([
+        ResNet50(include_top=False, weights='imagenet', input_shape=(224, 224, 3)),
+        Flatten(),
+        Dense(num_classes, activation='softmax'),
+        
+    ])
+
+model.compile(optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=10)
+
 
