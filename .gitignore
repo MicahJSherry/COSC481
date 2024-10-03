@@ -1,3 +1,4 @@
+*.keras
 spark22
 
 # Byte-compiled / optimized / DLL files
