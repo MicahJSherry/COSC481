@@ -1,3 +1,6 @@
+import os 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -12,12 +15,13 @@ from load_image import load_images
 import numpy as np
 
 import tensorflow as tf
-from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
-from tensorflow.keras.applications import ResNet50, VGG16, VGG19, InceptionV3
+from tensorflow.keras.layers import Dense,Dropout, Conv2D, MaxPooling2D, Flatten
+from tensorflow.keras.applications import ResNet50, VGG16, VGG19, InceptionV3,vgg16, vgg19
 from tensorflow.keras.models import Sequential
 from datetime import datetime
 from alexnet import alexnet
 
+from tensorflow.keras.optimizers import Adam, Nadam, RMSprop  
 time = datetime.now().strftime("%y-%m-%dT%H-%M")
 
 def save_conf_mat(y_true, y_pred, name):
@@ -43,7 +47,7 @@ y=y.reshape(-1,1)
 print(X.shape)
 le = OneHotEncoder(sparse_output=False)
 y = le.fit_transform(y)
-
+X= X/255
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 num_classes = 11
@@ -53,40 +57,72 @@ resnet50 = Sequential([
         Flatten(),
         Dense(num_classes, activation='softmax')])
 
-
-vgg16 = Sequential([
-        VGG16(include_top=False, weights='imagenet', input_shape=(224, 224, 3)),
+vgg16_base = VGG16(include_top=False, weights="imagenet", input_shape=(224, 224, 3))
+vgg16_base.trainable= False
+vgg16_model = Sequential([
+        vgg16_base,
         Flatten(),
+        Dense(4096,activation="relu"),
+        Dropout(0.5),
+        Dense(4096,activation="relu"),
+        Dropout(0.5),
         Dense(num_classes, activation='softmax')])
 
-vgg19 = Sequential([
-        VGG19(include_top=False, weights='imagenet', input_shape=(224, 224, 3)),
+vgg19_base = VGG19(include_top=False, weights="imagenet",pooling="max", input_shape=(224, 224, 3))
+vgg19_base.trainable= False
+vgg19_model = Sequential([
+        vgg19_base,
         Flatten(),
-        Dense(num_classes, activation='softmax')])
+        Dense(4096,activation="sigmoid"),
+        Dropout(0.5),
+        Dense(4096,activation="sigmoid"),
+        Dropout(0.5),
+        Dense(num_classes, activation="softmax")])
+
+googleNet = Sequential([
+        InceptionV3(include_top=False, input_shape=(224, 224, 3)),
+        Dense(num_classes, activation="softmax"),
+        ])
 
 alex = alexnet(num_classes)
 
-models = {"alexnet":alex,
-          "resnet50": resnet50,
-          "vgg16":vgg16,
-          "vgg19":vgg19}
+models = {#"alexnet":alex,
+          #"resnet50": resnet50,
+          #"vgg16":vgg16_model,
+          #"vgg19":vgg19_model,
+          "googlenet":googleNet,
+          }
 
 for name, model in models.items():
-
-    model.compile(optimizer='adam',
-        loss='categorical_crossentropy',
+    #optim = Adam()#learning_rate=0.0005, beta_1=0.9999, beta_2=0.999, epsilon=1e-8)
+    optim = RMSprop()
+    if False and name =="vgg16":
+        x = vgg16.preprocess_input(X_train)
+        x_test= vgg16.preprocess_input(X_test)
+    
+    elif False and name =="vgg19":
+        x = vgg16.preprocess_input(X_train)
+        x_test= vgg16.preprocess_input(X_test)
+    else:
+        x= X_train
+        x_test = X_test
+         
+    #optim  = Nadam(learning_rate=0.001)
+    model.compile(optimizer=optim,
+        loss="categorical_crossentropy",
         metrics=['accuracy'])
     
-    model.fit(X_train, y_train, epochs=100)
+    model.fit(x, y_train, epochs=50)
     
     model.save(f"{name}_{time}.keras") 
 
-    y_pred = model.predict(X_test)
+    y_pred = model.predict(x_test)
+    print(y_pred)
     y_pred = tf.argmax(y_pred,axis=-1)
     y_t = tf.argmax(y_test,axis=-1)
-   
-    print(y_pred)
-    print(y_t)
+    
+    print(y_pred.shape)
+    print(y_t.shape)
     results = classification_report(y_true=y_t, y_pred=y_pred)
        
     with open(f"{name}_{time}_metrics.txt", "w") as f:

@@ -21,9 +21,9 @@ def alexnet(num_classes):
     model.add(MaxPooling2D((3, 3), strides=(2, 2)))
 
     model.add(Flatten())
-    model.add(Dense(4096, activation='relu'))
+    model.add(Dense(4096, activation='sigmoid'))
     model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu'))
+    model.add(Dense(4096, activation='sigmoid'))
     model.add(Dropout(0.5))
     model.add(Dense(num_classes, activation='softmax'))  # Adjust the number of classes as needed
     
