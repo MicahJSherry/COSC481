@@ -81,6 +81,7 @@ vgg19_model = Sequential([
 
 googleNet = Sequential([
         InceptionV3(include_top=False, input_shape=(224, 224, 3)),
+        Flatten(),
         Dense(num_classes, activation="softmax"),
         ])
 
@@ -112,7 +113,7 @@ for name, model in models.items():
         loss="categorical_crossentropy",
         metrics=['accuracy'])
     
-    model.fit(x, y_train, epochs=50)
+    model.fit(x, y_train, epochs=10)
     
     model.save(f"{name}_{time}.keras") 
 
