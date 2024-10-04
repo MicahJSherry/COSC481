@@ -12,4 +12,4 @@ def copy_image_dir_subset(dir,num_files_per_dir, out_dir = "images"):
             
                 cv2.imwrite(out_dir+"/"+file, image)
 
-copy_image_dir_subset("spark22/test", 2, out_dir = "images")                
+copy_image_dir_subset("spark22/test", 4, out_dir = "images")                
