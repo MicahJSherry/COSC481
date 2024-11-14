@@ -18,8 +18,11 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense,Dropout, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.applications import ResNet50, VGG16, VGG19, InceptionV3,vgg16, vgg19
 from tensorflow.keras.models import Sequential
+
 from datetime import datetime
+
 from alexnet import alexnet
+from fusion import *
 
 from tensorflow.keras.optimizers import Adam, Nadam, RMSprop  
 time = datetime.now().strftime("%y-%m-%dT%H-%M")
@@ -40,7 +43,7 @@ def save_conf_mat(y_true, y_pred, name):
     plt.clf()
 
 
-num_images = -1
+num_images = 100
 X, y = load_images("./spark22/train",num_images)
 y= np.array(y)
 y=y.reshape(-1,1)
@@ -55,6 +58,10 @@ num_classes = 11
 resnet50 = Sequential([
         ResNet50(include_top=False, weights='imagenet', input_shape=(224, 224, 3)),
         Flatten(),
+        Dense(4096,activation="relu"),
+        Dropout(0.5),
+        Dense(4096,activation="relu"),
+        Dropout(0.5),
         Dense(num_classes, activation='softmax')])
 
 vgg16_base = VGG16(include_top=False, weights="imagenet", input_shape=(224, 224, 3))
@@ -82,6 +89,10 @@ vgg19_model = Sequential([
 googleNet = Sequential([
         InceptionV3(include_top=False, input_shape=(224, 224, 3)),
         Flatten(),
+        Dense(4096,activation="relu"),
+        Dropout(0.5),
+        Dense(4096,activation="relu"),
+        Dropout(0.5),
         Dense(num_classes, activation="softmax"),
         ])
 
@@ -91,24 +102,25 @@ models = {#"alexnet":alex,
           #"resnet50": resnet50,
           #"vgg16":vgg16_model,
           #"vgg19":vgg19_model,
-          "googlenet":googleNet,
+          #"googlenet":googleNet,
+          #"cat_fusion":build_fusion_model(method="cat", out_size=11)
+          #"max_fusion":build_fusion_model(method="max", out_size=11)
+          #"min_fusion":build_fusion_model(method="min", out_size=11),
+          #"avg_fusion":build_fusion_model(method="avg", out_size=11)
+          
+          #"mult_fusion":build_fusion_model(method="mult", out_size=11),
+          #"sum_fusion":build_fusion_model(method="sum", out_size=11),
+          "wave_fusion":build_fusion_model(method="wavelet", out_size=11)
           }
 
 for name, model in models.items():
     #optim = Adam()#learning_rate=0.0005, beta_1=0.9999, beta_2=0.999, epsilon=1e-8)
     optim = RMSprop()
-    if False and name =="vgg16":
-        x = vgg16.preprocess_input(X_train)
-        x_test= vgg16.preprocess_input(X_test)
-    
-    elif False and name =="vgg19":
-        x = vgg16.preprocess_input(X_train)
-        x_test= vgg16.preprocess_input(X_test)
-    else:
-        x= X_train
-        x_test = X_test
-         
-    #optim  = Nadam(learning_rate=0.001)
+
+
+    x      = X_train
+    x_test = X_test
+    #optim = Nadam(learning_rate=0.001)
     model.compile(optimizer=optim,
         loss="categorical_crossentropy",
         metrics=['accuracy'])
