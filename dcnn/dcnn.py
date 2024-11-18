@@ -43,7 +43,7 @@ def save_conf_mat(y_true, y_pred, name):
     plt.clf()
 
 
-num_images = 100
+num_images = -1
 X, y = load_images("./spark22/train",num_images)
 y= np.array(y)
 y=y.reshape(-1,1)
@@ -98,20 +98,20 @@ googleNet = Sequential([
 
 alex = alexnet(num_classes)
 
-models = {#"alexnet":alex,
-          #"resnet50": resnet50,
-          #"vgg16":vgg16_model,
-          #"vgg19":vgg19_model,
-          #"googlenet":googleNet,
-          #"cat_fusion":build_fusion_model(method="cat", out_size=11)
-          #"max_fusion":build_fusion_model(method="max", out_size=11)
-          #"min_fusion":build_fusion_model(method="min", out_size=11),
-          #"avg_fusion":build_fusion_model(method="avg", out_size=11)
+models = {"resnet50": resnet50,
+          "vgg16":vgg16_model,
+          "vgg19":vgg19_model,
+          "googlenet":googleNet,
           
+          #"cat_fusion":build_fusion_model(method="cat", out_size=11),
+          #"max_fusion":build_fusion_model(method="max", out_size=11),
+          #"min_fusion":build_fusion_model(method="min", out_size=11),
+          #"avg_fusion":build_fusion_model(method="avg", out_size=11),
           #"mult_fusion":build_fusion_model(method="mult", out_size=11),
           #"sum_fusion":build_fusion_model(method="sum", out_size=11),
-          "wave_fusion":build_fusion_model(method="wavelet", out_size=11)
+          #"wave_fusion":build_fusion_model(method="wavelet", out_size=11),
           }
+e = 20
 
 for name, model in models.items():
     #optim = Adam()#learning_rate=0.0005, beta_1=0.9999, beta_2=0.999, epsilon=1e-8)
@@ -125,9 +125,9 @@ for name, model in models.items():
         loss="categorical_crossentropy",
         metrics=['accuracy'])
     
-    model.fit(x, y_train, epochs=10)
+    model.fit(x, y_train, epochs=e)
     
-    model.save(f"{name}_{time}.keras") 
+    model.save(f"models/{name}_{time}.keras") 
 
     y_pred = model.predict(x_test)
     print(y_pred)
