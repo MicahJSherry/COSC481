@@ -2,21 +2,37 @@
 import os 
 import matplotlib.pyplot as plt
 
-def create_bar(dcnns, fusions,  col, path="metrics"):
+def create_bar(dcnns, fusions,  col, path="metrics", dcnn_color="#eba834", fusion_color="#55d3fa"):
     cat = []
     val = [] 
+    c = []
     for model, metrics in dcnns.items():
         m = metrics[col] 
         cat.append(model)
         val.append(m)
-    
+        c.append(dcnn_color)
+    n_dcnns = len(val)
+    max_val = max(val)
+    avg_val = sum(val)/n_dcnns
+    c.append(dcnn_color)
+    cat.append(" ")
+    val.append(0)
+
     for model, metrics in fusions.items():
         m = metrics[col] 
         cat.append(model)
         val.append(m)
-
-    plt.bar(cat, val)
-    plt.xticks(rotation=45, ha="right")
+        c.append(fusion_color)
+    plt.bar(cat, val, color=c)
+    plt.axhline(y=max_val, xmin=(n_dcnns+.5)/len(val),
+                 color="b", linestyle ="--", label=f"dcnn maximum {col}: {max_val:.2f}")
+    
+    plt.axhline(y=avg_val, xmin=(n_dcnns+.5)/len(val),
+                 color="r", linestyle ="--", label=f"dcnn average {col}: {avg_val:.2f}")
+    plt.legend(loc=3)
+    
+    plt.axvline(x= n_dcnns, color="k")
+    plt.xticks(rotation=23)
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
