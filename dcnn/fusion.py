@@ -15,11 +15,10 @@ model paths
 ../dcnn/vgg16_24-10-04T16-11.keras
 
 """
-paths = [
-        "models/resnet50_24-10-17T16-00.keras",
-        "models/vgg19_24-10-04T16-11.keras",
-        "models/googlenet_24-10-17T16-00.keras",
-        "models/vgg16_24-10-04T16-11.keras"]
+paths = ["models/googlenet_24-11-18T16-07.keras",
+         "models/resnet50_24-11-18T16-07.keras",
+         "models/vgg16_24-11-18T16-07.keras",
+         "models/vgg19_24-11-18T16-07.keras"]
 
 def build_fusion_model(method="cat", out_size=11,model_paths=paths):
     inputs = keras.Input(shape=(224, 224, 3))

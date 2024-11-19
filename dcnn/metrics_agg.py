@@ -1,5 +1,27 @@
 
 import os 
+import matplotlib.pyplot as plt
+
+def create_bar(dcnns, fusions,  col):
+    cat = []
+    val = [] 
+    for model, metrics in dcnns.items():
+        m = metrics[col] 
+        cat.append(model)
+        val.append(m)
+    
+    for model, metrics in fusions.items():
+        m = metrics[col] 
+        cat.append(model)
+        val.append(m)
+
+    plt.bar(cat, val)
+    
+    plt.xlabel('Models')
+    plt.ylabel(f"{col}")
+    plt.title(f"{col} Bar graph")
+    plt.savefig(f"{col}_bar_graph")
+    plt.clf()
 
 path= "./metrics"
 files = os.listdir(path)
@@ -42,8 +64,12 @@ for k in keys:
     else:
         base_models[k.split("_")[0]] = metrics[k]
 
+
+create_bar(base_models, fusions,  "accuracy")
 print(fusions)
 print()
 print(base_models)
+
+
 
 

@@ -98,20 +98,20 @@ googleNet = Sequential([
 
 alex = alexnet(num_classes)
 
-models = {"resnet50": resnet50,
-          "vgg16":vgg16_model,
-          "vgg19":vgg19_model,
-          "googlenet":googleNet,
+models = {#"resnet50": resnet50,
+          #"vgg16":vgg16_model,
+          #"vgg19":vgg19_model,
+          #"googlenet":googleNet,
           
           #"cat_fusion":build_fusion_model(method="cat", out_size=11),
           #"max_fusion":build_fusion_model(method="max", out_size=11),
           #"min_fusion":build_fusion_model(method="min", out_size=11),
-          #"avg_fusion":build_fusion_model(method="avg", out_size=11),
-          #"mult_fusion":build_fusion_model(method="mult", out_size=11),
-          #"sum_fusion":build_fusion_model(method="sum", out_size=11),
+          "avg_fusion":build_fusion_model(method="avg", out_size=11),
+          "mult_fusion":build_fusion_model(method="mult", out_size=11),
+          "sum_fusion":build_fusion_model(method="sum", out_size=11),
           #"wave_fusion":build_fusion_model(method="wavelet", out_size=11),
           }
-e = 20
+e = 10
 
 for name, model in models.items():
     #optim = Adam()#learning_rate=0.0005, beta_1=0.9999, beta_2=0.999, epsilon=1e-8)
@@ -138,10 +138,10 @@ for name, model in models.items():
     print(y_t.shape)
     results = classification_report(y_true=y_t, y_pred=y_pred)
        
-    with open(f"{name}_{time}_metrics.txt", "w") as f:
+    with open(f"metrics/{name}_{time}_metrics.txt", "w") as f:
         # Write some text to the file
         f.write(str(results))
-    save_conf_mat(y_t, y_pred, name=f"{name}_{time}")
+    save_conf_mat(y_t, y_pred, name=f"metrics/{name}_{time}")
 
 
 
