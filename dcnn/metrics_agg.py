@@ -16,7 +16,7 @@ def create_bar(dcnns, fusions,  col, path="metrics"):
         val.append(m)
 
     plt.bar(cat, val)
-    plt.xticks(rotation=90)
+    plt.xticks(rotation=45)
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
