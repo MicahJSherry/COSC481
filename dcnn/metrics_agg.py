@@ -45,7 +45,7 @@ metrics = {}
 
 
 for file_name in files:
-    if file_name.endswith(".txt") and ("svm" in file_name or "fusion" not in file_name):
+    if file_name.endswith(".txt") and ("svm" not in file_name or "fusion" not in file_name):
         print(file_name)
         with open(f"{path}/{file_name}","r") as f: 
             met ={"precision": 0,
@@ -80,11 +80,6 @@ for k in keys:
         fusions[k.split("_")[0]]=metrics[k]
     else:
         base_models[k.split("_")[0]] = metrics[k]
-
-print(fusions)
-print()
-print(base_models)
-
 
 
 create_bar(base_models, fusions,  "accuracy")
