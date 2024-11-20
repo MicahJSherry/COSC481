@@ -36,7 +36,7 @@ def create_bar(dcnns, fusions,  col, path="metrics", dcnn_color="#eba834", fusio
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
-    plt.savefig(f"{path}/{col}_bar_graph")
+    plt.savefig(f"{path}/svm_{col}_bar_graph")
     plt.clf()
 
 path= "./metrics"
@@ -45,7 +45,7 @@ metrics = {}
 
 
 for file_name in files:
-    if file_name.endswith(".txt") and ("svm" not in file_name or "fusion" not in file_name):
+    if file_name.endswith(".txt") and ("svm" in file_name or "fusion" not in file_name):
         print(file_name)
         with open(f"{path}/{file_name}","r") as f: 
             met ={"precision": 0,
