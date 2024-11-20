@@ -1,0 +1,17 @@
+                         precision    recall  f1-score   support
+
+                 cheops       0.12      0.92      0.21       954
+                 debris       0.14      0.01      0.02       921
+            double_star       0.33      0.21      0.26       997
+earth_observation_sat_1       0.54      0.05      0.10       964
+        lisa_pathfinder       0.00      0.00      0.00       952
+                proba_2       0.00      0.00      0.00       993
+            proba_3_csc       0.00      0.00      0.00       982
+            proba_3_ocs       0.25      0.13      0.17       951
+                smart_1       0.26      0.42      0.32       954
+                   soho       0.13      0.01      0.01       967
+             xmm_newton       0.07      0.00      0.00       923
+
+               accuracy                           0.16     10558
+              macro avg       0.17      0.16      0.10     10558
+           weighted avg       0.17      0.16      0.10     10558

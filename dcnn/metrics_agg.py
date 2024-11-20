@@ -43,9 +43,10 @@ path= "./metrics"
 files = os.listdir(path)
 metrics = {}
 
+
 for file_name in files:
-    if file_name.endswith(".txt") and file_name not in ["resnet50_24-10-03T00-07_metrics.txt"]:
-        
+    if file_name.endswith(".txt") and ("svm" in file_name or "fusion" not in file_name):
+        print(file_name)
         with open(f"{path}/{file_name}","r") as f: 
             met ={"precision": 0,
                   "recall"   : 0,
@@ -59,7 +60,7 @@ for file_name in files:
                 met["precision"]+= float(m[0])/11                
                 met["recall"]   += float(m[1])/11              
                 met["f1-score"] += float(m[2])/11
-            
+                    
 
 
             f.readline()     
@@ -80,15 +81,16 @@ for k in keys:
     else:
         base_models[k.split("_")[0]] = metrics[k]
 
+print(fusions)
+print()
+print(base_models)
+
+
 
 create_bar(base_models, fusions,  "accuracy")
 create_bar(base_models, fusions,  "f1-score")
 create_bar(base_models, fusions,  "precision")
 create_bar(base_models, fusions,  "recall")
-
-print(fusions)
-print()
-print(base_models)
 
 
 
