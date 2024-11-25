@@ -1,4 +1,4 @@
-# system and control imports  
+# system and bookkeeping imports 
 import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 from datetime import datetime
@@ -48,10 +48,6 @@ models = {"resnet50" : model_factory("resnet50"),
 	  "vgg16"    : model_factory("vgg16"),
 	  "googlenet": model_factory("googlenet"),
 
-          #"vgg16":vgg16_model,
-          #"vgg19":vgg19_model,
-          #"googlenet":googleNet,
-          
           #"cat_fusion":build_fusion_model(method="cat", out_size=11),
           #"max_fusion":build_fusion_model(method="max", out_size=11),
           #"min_fusion":build_fusion_model(method="min", out_size=11),
@@ -61,14 +57,15 @@ models = {"resnet50" : model_factory("resnet50"),
           #"wave_fusion":build_fusion_model(method="wavelet", out_size=11),
           }
 
+
+
 for name, model in models.items():
     #optim = Adam()#learning_rate=0.0005, beta_1=0.9999, beta_2=0.999, epsilon=1e-8)
+    #optim = Nadam(learning_rate=0.001)
     optim = RMSprop()
-
 
     x      = X_train
     x_test = X_test
-    #optim = Nadam(learning_rate=0.001)
     model.compile(optimizer=optim,
         loss="categorical_crossentropy",
         metrics=['accuracy'])
