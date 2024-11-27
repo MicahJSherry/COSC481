@@ -27,11 +27,12 @@ def make_generator_model():
     
     noise = tf.keras.Input(shape=(1000,))
     
+    k = make_conv()(noise) 
     r = make_conv()(noise)
     g = make_conv()(noise)
     b = make_conv()(noise)
 
-    x = tf.keras.layers.Concatenate()([r,g,b])
+    x = tf.keras.layers.Concatenate()([k+r,k+g,k+b])
     assert x.shape == (None, 28, 28, 3)
     
     model = tf.keras.Model(inputs=noise, outputs=x)
