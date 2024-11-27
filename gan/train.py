@@ -56,7 +56,7 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
                                  discriminator=discriminator)
 
 OUT_DIR = "images/dcgan"
-EPOCHS = 1000
+EPOCHS = 100
 noise_dim = 1000
 num_examples_to_generate = 16
 
@@ -119,7 +119,7 @@ def generate_and_save_images(model, epoch, test_input):
 
   for i in range(predictions.shape[0]):
       plt.subplot(4, 4, i+1)
-      plt.imshow(predictions[i, :, :, :] * 127.5/3 +127.5 )
+      plt.imshow(predictions[i, :, :, :] * 127.5/3 +127.5/3 )
       plt.axis('off')
 
   plt.savefig(f'{OUT_DIR}/image_at_epoch_{epoch:04d}.png')
