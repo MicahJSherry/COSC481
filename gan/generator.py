@@ -27,7 +27,7 @@ def make_generator_model():
     
     noise = tf.keras.Input(shape=(1000,))
     
-    k = make_conv()(noise) 
+    k = make_conv()(noise)*.50 
     r = make_conv()(noise)
     g = make_conv()(noise)
     b = make_conv()(noise)
