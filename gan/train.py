@@ -9,13 +9,29 @@ from tensorflow.keras import layers
 import time
 
 import tensorflow as tf
+import tensorflow_datasets as tfds
 
 from generator     import make_generator_model, generator_loss
 from discriminator import make_discriminator_model,   discriminator_loss
 
 from IPython import display
 
-(train_images, train_labels), (_, _) = tf.keras.datasets.fashion_mnist.load_data()
+def load_faces():
+    dataset = tfds.load('lfw', split='train', shuffle_files=True) 
+    images =[]
+    for example in dataset.take(5):
+        image = example["image"]
+        label = example["label"]
+
+        # Preprocess the image (optional, adjust as needed)
+        image = np.mean(image, axis=2, keepdims=True)
+        image = tf.image.resize(image, [28, 28])
+        image = image.numpy()
+        images.append(image)
+    return np.array(images)
+
+train_images =load_faces() 
+#(train_images, train_labels), (_, _) = tf.keras.datasets.fashion_mnist.load_data()
 
 train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
 train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
