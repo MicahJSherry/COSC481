@@ -4,7 +4,7 @@ from tensorflow.keras import layers
 def make_generator_model():
     
     model = tf.keras.Sequential()
-    model.add(layers.Input((100,)))
+    model.add(layers.Input((1000,)))
     model.add(layers.Dense(7*7*256, use_bias=False))
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
