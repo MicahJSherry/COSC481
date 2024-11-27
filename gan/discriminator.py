@@ -1,6 +1,7 @@
 import tensorflow as tf 
 from tensorflow.keras import layers
-def make_discriminator_model():
+
+def make_1_channel():
     model = tf.keras.Sequential()
     model.add(layers.Input((28, 28, 1)))
 
@@ -13,8 +14,21 @@ def make_discriminator_model():
     model.add(layers.Dropout(0.3))
 
     model.add(layers.Flatten())
-    model.add(layers.Dense(1))
+    return model
 
+
+def make_discriminator_model():
+    image = tf.keras.Input((28, 28, 3)) 
+    
+    r = make_1_channel()(image[:,:,:,0:1])
+    g = make_1_channel()(image[:,:,:,1:2])
+    b = make_1_channel()(image[:,:,:,2:3])
+    
+    x = tf.keras.layers.Concatenate()([r,g,b])
+    x = layers.Dense(10)(x)
+    x = layers.Dense(1)(x)
+    
+    model = tf.keras.Model(inputs=image, outputs=x)
     return model
 
 def discriminator_loss(real_output, fake_output):

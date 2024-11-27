@@ -24,7 +24,7 @@ def load_faces():
         label = example["label"]
 
         # Preprocess the image (optional, adjust as needed)
-        image = np.mean(image, axis=2, keepdims=True)
+        #image = np.mean(image, axis=2, keepdims=True)
         image = tf.image.resize(image, [28, 28])
         image = image.numpy()
         images.append(image)
@@ -33,7 +33,7 @@ def load_faces():
 train_images =load_faces() 
 #(train_images, train_labels), (_, _) = tf.keras.datasets.fashion_mnist.load_data()
 
-train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
+train_images = train_images.reshape(train_images.shape[0], 28, 28, 3).astype('float32')
 train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
 
 BUFFER_SIZE = 60000
@@ -56,8 +56,8 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
                                  discriminator=discriminator)
 
 OUT_DIR = "images/dcgan"
-EPOCHS = 2000
-noise_dim = 1400
+EPOCHS = 100
+noise_dim = 100
 num_examples_to_generate = 16
 
 # You will reuse this seed overtime (so it's easier)

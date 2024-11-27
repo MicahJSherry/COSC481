@@ -1,10 +1,10 @@
 import tensorflow as tf
 from tensorflow.keras import layers
-
-def make_generator_model():
-    
+def make_conv():
     model = tf.keras.Sequential()
-    model.add(layers.Input((1400,)))
+    model.add(layers.Input((100,)))
+
+    
     model.add(layers.Dense(7*7*256, use_bias=False))
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
@@ -20,6 +20,21 @@ def make_generator_model():
     model.add(layers.LeakyReLU())
 
     model.add(layers.Conv2DTranspose(1, (5, 5), strides=(2, 2), padding='same', use_bias=False, activation='tanh'))
+    assert model.output_shape == (None, 28, 28, 1)
+    return model
+
+def make_generator_model():
+    
+    noise = tf.keras.Input(shape=(100,))
+    
+    r = r_channel = make_conv()(noise)
+    g = g_channel = make_conv()(noise)
+    b = b_channel = make_conv()(noise)
+
+    x = tf.keras.layers.Concatenate()([r,g,b])
+    assert x.shape == (None, 28, 28, 3)
+    
+    model = tf.keras.Model(inputs=noise, outputs=x)
 
     return model
 
