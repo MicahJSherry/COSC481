@@ -19,12 +19,13 @@ def make_1_channel():
 
 def make_discriminator_model():
     image = tf.keras.Input((28, 28, 3)) 
-    
+ 
     r = make_1_channel()(image[:,:,:,0:1])
     g = make_1_channel()(image[:,:,:,1:2])
     b = make_1_channel()(image[:,:,:,2:3])
     
     x = tf.keras.layers.Concatenate()([r,g,b])
+    x = layers.Dense(15)(x)
     x = layers.Dense(10)(x)
     x = layers.Dense(1)(x)
     
