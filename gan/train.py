@@ -56,7 +56,7 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
                                  discriminator=discriminator)
 
 OUT_DIR = "images/dcgan"
-EPOCHS = 100
+EPOCHS = 1000
 noise_dim = 100
 num_examples_to_generate = 16
 
