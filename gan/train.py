@@ -57,7 +57,11 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
 
 OUT_DIR = "images/dcgan"
 EPOCHS = 100
+<<<<<<< HEAD
 noise_dim = 1000
+=======
+noise_dim = 100
+>>>>>>> parent of d70a5fa (retrained rgb with 1k epochs)
 num_examples_to_generate = 16
 
 # You will reuse this seed overtime (so it's easier)

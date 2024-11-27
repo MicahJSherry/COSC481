@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import layers
 def make_conv():
     model = tf.keras.Sequential()
-    model.add(layers.Input((1000,)))
+    model.add(layers.Input((100,)))
 
     
     model.add(layers.Dense(7*7*256, use_bias=False))
@@ -25,7 +25,7 @@ def make_conv():
 
 def make_generator_model():
     
-    noise = tf.keras.Input(shape=(1000,))
+    noise = tf.keras.Input(shape=(100,))
     
     r = make_conv()(noise)*.80
     g = make_conv()(noise)*.70
