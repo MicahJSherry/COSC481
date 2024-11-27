@@ -57,11 +57,7 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
 
 OUT_DIR = "images/dcgan"
 EPOCHS = 100
-<<<<<<< HEAD
 noise_dim = 1000
-=======
-noise_dim = 100
->>>>>>> parent of d70a5fa (retrained rgb with 1k epochs)
 num_examples_to_generate = 16
 
 # You will reuse this seed overtime (so it's easier)
@@ -134,10 +130,11 @@ train(train_dataset, EPOCHS)
 
 
 def display_image(epoch_no):
-  return PIL.Image.open('image_at_epoch_{:04d}.png'.format(epoch_no))
+  return PIL.Image.open(f'{OUT_DIR}/image_at_epoch_{epoch_no:04d}.png')
+    
 
 
-anim_file = 'dcgan.gif'
+anim_file = f'{OUT_DIR}/dcgan.gif'
 
 with imageio.get_writer(anim_file, mode='I') as writer:
   filenames = glob.glob(f'{OUT_DIR}/image*.png')
