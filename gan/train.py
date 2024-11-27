@@ -19,7 +19,7 @@ from IPython import display
 def load_faces():
     dataset = tfds.load('lfw', split='train', shuffle_files=True) 
     images =[]
-    for example in dataset.take(5):
+    for example in dataset:
         image = example["image"]
         label = example["label"]
 
