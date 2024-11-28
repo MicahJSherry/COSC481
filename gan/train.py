@@ -16,7 +16,17 @@ from discriminator import make_discriminator_model,   discriminator_loss
 
 from IPython import display
 
-def load_faces():
+out_shape = (128 ,128, 1)
+BUFFER_SIZE = 60000
+BATCH_SIZE = 256
+OUT_DIR = "images/dcgan"
+EPOCHS = 100
+noise_dim = 1000
+num_examples_to_generate = 16
+
+assert out_shape[0]== out_shape[1]
+
+def load_faces(shape=out_shape):
     dataset = tfds.load('lfw', split='train', shuffle_files=True) 
     images =[]
     for example in dataset:
@@ -24,26 +34,24 @@ def load_faces():
         label = example["label"]
 
         # Preprocess the image (optional, adjust as needed)
-        #image = np.mean(image, axis=2, keepdims=True)
-        image = tf.image.resize(image, [128, 128])
+        if  shape[-1] == 1:
+            image = np.mean(image, axis=2, keepdims=True)
+        
+        image = tf.image.resize(image, [shape[0], shape[1]])
         image = image.numpy()
         images.append(image)
     return np.array(images)
 
-train_images =load_faces() 
-#(train_images, train_labels), (_, _) = tf.keras.datasets.fashion_mnist.load_data()
+train_images =load_faces(out_shape) 
 
-train_images = train_images.reshape(train_images.shape[0], 128, 128, 3).astype('float32')
+train_images = train_images.reshape(train_images.shape[0], out_shape[0], out_shape[1], out_shape[2]).astype('float32')
 train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
-
-BUFFER_SIZE = 60000
-BATCH_SIZE = 256
 
 # Batch and shuffle the data
 train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 
-generator = make_generator_model()
-discriminator = make_discriminator_model()
+generator = make_generator_model(in_dim=noise_dim, outshape=out_shape)
+discriminator = make_discriminator_model(inshape=out_shape)
 
 generator_optimizer = tf.keras.optimizers.Adam(1e-4)
 discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
@@ -55,10 +63,6 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
                                  generator=generator,
                                  discriminator=discriminator)
 
-OUT_DIR = "images/dcgan"
-EPOCHS = 100
-noise_dim = 1000
-num_examples_to_generate = 16
 
 # You will reuse this seed overtime (so it's easier)
 # to visualize progress in the animated GIF)
@@ -119,7 +123,10 @@ def generate_and_save_images(model, epoch, test_input):
 
   for i in range(predictions.shape[0]):
       plt.subplot(4, 4, i+1)
-      plt.imshow(predictions[i, :, :, :]*127.7 )
+      if out_shape[-1]==3:
+        plt.imshow(predictions[i, :, :, :]*127.5 + 127.5 )
+      else: 
+        plt.imshow(predictions[i, :, :, :]*127.5 + 127.5 ,cmap="gray")
       plt.axis('off')
 
   plt.savefig(f'{OUT_DIR}/image_at_epoch_{epoch:04d}.png')

@@ -1,8 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras import layers
-def make_conv():
+def make_conv(in_dim):
     model = tf.keras.Sequential()
-    model.add(layers.Input((1000,)))
+    model.add(layers.Input((in_dim,)))
 
     
     model.add(layers.Dense(7*7*256, use_bias=False))
@@ -23,9 +23,11 @@ def make_conv():
     assert model.output_shape == (None, 28, 28, 1)
     return model
 
-def make_large_conv():
+
+
+def make_large_conv(in_dim):
     model = tf.keras.Sequential()
-    model.add(layers.Input((1000,)))
+    model.add(layers.Input((in_dim,)))
 
     model.add(layers.Dense(16*16*256, use_bias=False))
     model.add(layers.BatchNormalization())
@@ -47,22 +49,31 @@ def make_large_conv():
     assert model.output_shape == (None, 128, 128, 1)
     return model 
 
-def make_generator_model():
-    
-    noise = tf.keras.Input(shape=(1000,))
-    
-    k = make_large_conv()(noise)*.50 
-    r = make_large_conv()(noise)
-    g = make_large_conv()(noise)
-    b = make_large_conv()(noise)
 
-    x = tf.keras.layers.Concatenate()([k+r,k+g,k+b])
-    #assert x.shape == (None, 28, 28, 3)
+
+def make_generator_model(in_dim=100, outshape= (28,28, 1)):
     
+    noise = tf.keras.Input(shape=(in_dim,))
+    assert outshape[0]==outshape[1]
+    
+    if outshape[0] ==128:
+        conv = make_large_conv
+    else:      
+        conv = make_conv
+    
+    if outshape[-1]== 3: 
+        k = conv(in_dim)(noise)*.50 
+        r = conv(in_dim)(noise)
+        g = conv(in_dim)(noise)
+        b = conv(in_dim)(noise)
+        x = tf.keras.layers.Concatenate()([k+r,k+g,k+b])
+    
+    else: 
+        x = conv(in_dim)(noise) 
+         
     model = tf.keras.Model(inputs=noise, outputs=x)
 
     return model
-
 
 
 def generator_loss(fake_output):
