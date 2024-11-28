@@ -16,13 +16,29 @@ def make_1_channel():
     model.add(layers.Flatten())
     return model
 
+def make_1_channel_l():
+    model = tf.keras.Sequential()
+    model.add(layers.Input((128, 128, 1)))
+
+    model.add(layers.Conv2D(64, (5, 5), strides=(2, 2), padding='same'))
+    model.add(layers.LeakyReLU())
+    model.add(layers.Dropout(0.3))
+
+    model.add(layers.Conv2D(128, (5, 5), strides=(2, 2), padding='same'))
+    model.add(layers.LeakyReLU())
+    model.add(layers.Dropout(0.3))
+
+    model.add(layers.Flatten())
+    return model
+
+
 
 def make_discriminator_model():
-    image = tf.keras.Input((28, 28, 3)) 
+    image = tf.keras.Input((128, 128, 3)) 
  
-    r = make_1_channel()(image[:,:,:,0:1])
-    g = make_1_channel()(image[:,:,:,1:2])
-    b = make_1_channel()(image[:,:,:,2:3])
+    r = make_1_channel_l()(image[:,:,:,0:1])
+    g = make_1_channel_l()(image[:,:,:,1:2])
+    b = make_1_channel_l()(image[:,:,:,2:3])
     
     x = tf.keras.layers.Concatenate()([r,g,b])
     x = layers.Dense(15)(x)
