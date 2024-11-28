@@ -20,7 +20,7 @@ out_shape = (128 ,128, 1)
 BUFFER_SIZE = 60000
 BATCH_SIZE = 256
 OUT_DIR = "images/dcgan"
-EPOCHS = 100
+EPOCHS = 1000
 noise_dim = 1000
 num_examples_to_generate = 16
 
