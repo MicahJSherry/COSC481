@@ -48,7 +48,7 @@ def build_fusion_model(method="cat", out_size=11,model_paths=paths):
         x = keras.layers.add(dcnn_out)
     elif method =="wavelet":         
         #FIXME 
-	x = keras.layers.Concatenate()(dcnn_out)
+        x = keras.layers.Concatenate()(dcnn_out)
         x = wavelet_layer(x) 
     else: 
         raise Exception(f"fusion method: {method} is not defined")
