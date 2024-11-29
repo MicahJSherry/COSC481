@@ -72,7 +72,7 @@ def create_bar(metrics, col):
         val.append(m)
     plt.bar(cat, val,)
 
-    plt.xticks(rotation=90, va="top")
+    plt.xticks(rotation=90, va="bottom")
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
