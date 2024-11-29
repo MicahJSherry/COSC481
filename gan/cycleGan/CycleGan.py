@@ -15,7 +15,7 @@ IMG_HEIGHT = 256
 OUTPUT_CHANNELS = 3
 
 LAMBDA = 10
-EPOCHS = 10
+EPOCHS = 100
 
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
@@ -136,7 +136,7 @@ def identity_loss(real_image, same_image):
   return LAMBDA * 0.5 * loss
 
 
-def generate_images(model, test_input):
+def generate_images(model, test_input, name):
   prediction = model(test_input)
 
   plt.figure(figsize=(12, 12))
@@ -150,7 +150,8 @@ def generate_images(model, test_input):
     # getting the pixel values between [0, 1] to plot it.
     plt.imshow(display_list[i] * 0.5 + 0.5)
     plt.axis('off')
-  plt.show()
+  plt.savefig(f"{name}.png")
+  plt.clf()
 
 @tf.function
 def train_step(real_x, real_y):
@@ -227,13 +228,14 @@ for epoch in range(EPOCHS):
  
   # Using a consistent image (sample_horse) so that the progress of the model
   # is clearly visible.
-  generate_images(generator_g, sample_horse)
+  generate_images(generator_g, sample_horse, f"epoch_{epoch}")
   print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1,
                                                       time.time()-start))
 
 # Run the trained model on the test dataset
+i=1
 for inp in test_horses.take(5):
-  generate_images(generator_g, inp)
-
+  generate_images(generator_g, inp, f"example_{i}")
+  i+=1
 
 
