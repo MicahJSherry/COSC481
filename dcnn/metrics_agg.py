@@ -68,7 +68,7 @@ def create_bar(metrics, col):
     
     for model, metrics in metrics.items():
         m = metrics[col]
-        cat.append(model)
+        cat.append(model.split("_")[0])
         val.append(m)
     plt.bar(cat, val,)
 
@@ -124,3 +124,5 @@ if __name__=="__main__":
     create_bar(models, "precision")
     create_bar(models, "recall")
 
+
+    
