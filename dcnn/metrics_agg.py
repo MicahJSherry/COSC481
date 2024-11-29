@@ -93,7 +93,6 @@ def parse_metrics(path):
         if not  file_name.endswith(".txt"):
             continue	
 
-        print(file_name)
 
         with open(f"{path}/{file_name}", "r") as f:
             met = {"precision": 0,
@@ -111,6 +110,7 @@ def parse_metrics(path):
             f.readline()
             met["accuracy"] = float(f.readline().split()[1])
             metrics[file_name]= met
+            print(file_name.split("_")[0], met)
     return metrics
 
 
