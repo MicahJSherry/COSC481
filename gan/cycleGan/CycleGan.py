@@ -15,7 +15,7 @@ IMG_HEIGHT = 256
 OUTPUT_CHANNELS = 3
 
 LAMBDA = 10
-EPOCHS = 200  
+EPOCHS = 1000 
 
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
@@ -149,10 +149,13 @@ ckpt = tf.train.Checkpoint(generator_g=generator_g,
                            discriminator_y_optimizer=discriminator_y_optimizer)
 
 ckpt_manager = tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep=2)
-
+save_epoch = 0
 # if a checkpoint exists, restore the latest checkpoint.
 if ckpt_manager.latest_checkpoint:
   ckpt.restore(ckpt_manager.latest_checkpoint)
+  save_epoch = max([10*(int(x.split(".")[0].split("-")[-1])-1)
+                    for x in os.listdir(f"{checkpoint_path}") if x not in ["checkpoint"]])
+     
   print ('Latest checkpoint restored!!')
 
 
@@ -238,7 +241,7 @@ def train_step(real_x, real_y):
   discriminator_y_optimizer.apply_gradients(zip(discriminator_y_gradients,
                                                 discriminator_y.trainable_variables))
 
-for epoch in range(EPOCHS):
+for epoch in range(save_epoch, EPOCHS):
   start = time.time()
 
   n = 0
