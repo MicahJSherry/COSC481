@@ -1,7 +1,8 @@
 *.keras
 spark22
 
-training_checkpoints
+training_checkpoints/
+checkpoints/
 features/
 # Byte-compiled / optimized / DLL files
 __pycache__/
