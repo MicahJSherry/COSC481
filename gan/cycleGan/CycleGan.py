@@ -15,7 +15,7 @@ IMG_HEIGHT = 256
 OUTPUT_CHANNELS = 3
 
 LAMBDA = 10
-EPOCHS = 100
+EPOCHS = 200  
 
 dataset, metadata = tfds.load('cycle_gan/horse2zebra',
                               with_info=True, as_supervised=True)
@@ -113,7 +113,7 @@ for i in range(len(imgs)):
     plt.imshow(imgs[i][0] * 0.5 * contrast + 0.5)
 plt.savefig("example_0_training.png")
 plt.clf()
-
+plt.close()
 
 # loss functions
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
@@ -135,6 +135,28 @@ def identity_loss(real_image, same_image):
   loss = tf.reduce_mean(tf.abs(real_image - same_image))
   return LAMBDA * 0.5 * loss
 
+#Checkpoint manager
+
+checkpoint_path = "./checkpoints/train"
+
+ckpt = tf.train.Checkpoint(generator_g=generator_g,
+                           generator_f=generator_f,
+                           discriminator_x=discriminator_x,
+                           discriminator_y=discriminator_y,
+                           generator_g_optimizer=generator_g_optimizer,
+                           generator_f_optimizer=generator_f_optimizer,
+                           discriminator_x_optimizer=discriminator_x_optimizer,
+                           discriminator_y_optimizer=discriminator_y_optimizer)
+
+ckpt_manager = tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep=2)
+
+# if a checkpoint exists, restore the latest checkpoint.
+if ckpt_manager.latest_checkpoint:
+  ckpt.restore(ckpt_manager.latest_checkpoint)
+  print ('Latest checkpoint restored!!')
+
+
+
 
 def generate_images(model, test_input, name):
   prediction = model(test_input)
@@ -152,6 +174,8 @@ def generate_images(model, test_input, name):
     plt.axis('off')
   plt.savefig(f"{name}.png")
   plt.clf()
+  plt.close()
+
 
 @tf.function
 def train_step(real_x, real_y):
@@ -223,19 +247,30 @@ for epoch in range(EPOCHS):
     if n % 10 == 0:
       print ('.', end='')
     n += 1
-
-  #clear_output(wait=True)
- 
-  # Using a consistent image (sample_horse) so that the progress of the model
-  # is clearly visible.
-  generate_images(generator_g, sample_horse, f"epoch_{epoch}")
+  
+  print()
+  generate_images(generator_g, sample_horse, f"images/h2z/epoch_{epoch}")
+  generate_images(generator_f, sample_zebra, f"images/z2h/epoch_{epoch}") 
+  
+  if (epoch + 1) % 10 == 0:
+    ckpt_save_path = ckpt_manager.save()
+    print ('Saving checkpoint for epoch {} at {}'.format(epoch+1,
+                                                         ckpt_save_path))
+    
   print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1,
                                                       time.time()-start))
 
 # Run the trained model on the test dataset
 i=1
-for inp in test_horses.take(5):
-  generate_images(generator_g, inp, f"example_{i}")
+for inp in test_horses.take(50):
+  generate_images(generator_g, inp, f"images/h2z/example_h2z_{i}")
   i+=1
+
+i=1
+for inp in test_zebras.take(50):
+  generate_images(generator_f, inp, f"images/z2h/example_z2h_{i}")
+  i+=1
+
+
 
 
