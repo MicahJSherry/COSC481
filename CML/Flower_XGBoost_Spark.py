@@ -212,3 +212,8 @@ plt.legend(loc="lower right")
 plt.savefig('roc_curve.png')
 print("ROC curve saved as 'roc_curve.png'.")
 
+
+results = classification_report(y_true=y_val, y_pred=y_val_pred)
+with open(f"metrics.txt", "w") as f:
+    # Write some text to the file
+    f.write(str(results))
