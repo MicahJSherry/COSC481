@@ -24,13 +24,11 @@ from utils import save_conf_mat
 from load_image import load_images, download_sat_images
 
 
-
-
 time = datetime.now().strftime("%y-%m-%dT%H-%M") # time for book keeping
 save_model = False
  
-num_images = -1 
-num_classes = 19
+num_images = 500 
+num_classes = 11
 e = 10
 metrics_dir = "metrics"
 image_dir = "../dcnn/spark22"
@@ -45,7 +43,7 @@ le = OneHotEncoder(sparse_output=False)
 y_train = le.fit_transform(y_train)
 
 
-X_test, y_test = load_images(test_dir,num_images)
+X_test, y_test = load_images(test_dir, 100)
 
 y_test = np.array(y_test)
 y_test = y_test.reshape(-1,1)
@@ -58,17 +56,17 @@ X_test  = X_test/255
 mf = model_factory(num_classes=num_classes)
 
 models = [
-    "ConvNeXtBase",
-    "ConvNeXtLarge",
+    #"ConvNeXtBase",
+    #"ConvNeXtLarge",
     #"ConvNeXtSmall",
     #"ConvNeXtTiny",
     #"ConvNeXtXLarge",
-    "DenseNet121",
-    "DenseNet169",
+    #"DenseNet121",
+    #"DenseNet169",
     #"DenseNet201",
-    "EfficientNetB0",
+    #"EfficientNetB0",
     #"EfficientNetB1",
-    "EfficientNetB2",
+    #"EfficientNetB2",
     #"EfficientNetB3",
     #"EfficientNetB4",
     #"EfficientNetB5",
@@ -81,19 +79,19 @@ models = [
     #"EfficientNetV2L",
     #"EfficientNetV2M",
     #"EfficientNetV2S",
-    "InceptionResNetV2",
-    "InceptionV3",
-    "MobileNet",
+    #"InceptionResNetV2",
+    #"InceptionV3",
+    #"MobileNet",
     #"MobileNetV2",
-    "MobileNetV3Large",
+    #"MobileNetV3Large",
     #"MobileNetV3Small",
-    "NASNetLarge",
-    "NASNetMobile",
-    "ResNet101",
+    #"NASNetLarge",
+    #"NASNetMobile",
+    #"ResNet101",
     #"ResNet101V2",
-    "ResNet152",
+    #"ResNet152",
     #"ResNet152V2",
-    "ResNet50",
+    #"ResNet50",
     #"ResNet50V2",
     #"VGG16",
     #"VGG19",

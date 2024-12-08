@@ -65,7 +65,7 @@ class model_factory:
 
     def get_model(self, model_name,  train_base=True):
             
-        base = self.base_models.get(model_name)(self.args)
+        base = self.base_models.get(model_name)(**self.args)
         
         if base is None:
             raise ValueError(f"model_name: {model_name} is not defined (model_name must be one of ({base_models.keys()})") 
