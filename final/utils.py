@@ -1,4 +1,5 @@
 
+
 import os
 
 import matplotlib.pyplot as plt
@@ -67,7 +68,7 @@ def create_bar(metrics, col, path):
     val = []
     dirs = []
     c = []
-    i = 0 
+    i = -1 
     for model, metrics in sorted(metrics.items()):
         m = metrics[col]
         cat.append(model.split("_")[0])
@@ -80,7 +81,7 @@ def create_bar(metrics, col, path):
    
     plt.bar(cat, val,color=plt.cm.tab20(c))
 
-    plt.xticks(rotation=90, va="bottom")
+    plt.xticks(rotation=90, va="bottom", fontsize=12)
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
