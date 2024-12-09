@@ -68,20 +68,24 @@ def create_bar(metrics, col, path):
     val = []
     dirs = []
     c = []
-    i = -1 
+    i = 0 
     for model, metrics in sorted(metrics.items()):
         m = metrics[col]
         cat.append(model.split("_")[0])
         val.append(m)
         d = metrics["directory"]
-        if d not in dirs:
+        if d not in dirs and i!=0:
             i+=1
+            cat.append("")
+            val.append(0.0)
+            colors.append(0)
+            dirs.append("NONE")
         dirs.append(d)
         c.append(i)
    
     plt.bar(cat, val,color=plt.cm.tab20(c))
 
-    plt.xticks(rotation=90, va="bottom", fontsize=12)
+    plt.xticks(rotation=90, va="bottom", fontsize=8)
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
