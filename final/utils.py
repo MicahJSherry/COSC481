@@ -80,7 +80,8 @@ def create_bar(metrics, col, path):
         
         dirs.append(d)
         c.append(i)
-   
+      
+    plt.figure(figsize=(16, 1))
     plt.bar(cat, val,color=plt.cm.tab20(c))
 
     plt.xticks(rotation=90, va="bottom", fontsize=8)
