@@ -84,7 +84,7 @@ def create_bar(metrics, col, path):
     plt.figure(figsize=(16, 9))
     plt.bar(cat, val,color=plt.cm.tab20(c))
 
-    plt.xticks(rotation=90, va="bottom", fontsize=8)
+    plt.xticks(rotation=90, va="bottom")
     plt.xlabel('Models')
     plt.ylabel(f"{col}")
     plt.title(f"{col} Bar graph")
