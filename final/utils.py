@@ -65,12 +65,20 @@ def save_conf_mat(y_true, y_pred, name):
 def create_bar(metrics, col, path):
     cat = []
     val = []
-    
+    dirs = []
+    c = []
+    i = 0 
     for model, metrics in sorted(metrics.items()):
         m = metrics[col]
         cat.append(model.split("_")[0])
         val.append(m)
-    plt.bar(cat, val,)
+        d = metrics["directory"]
+        if d not in dirs:
+            i+=1
+        dirs.append(d)
+        c.append(i)
+   
+    plt.bar(cat, val,color=plt.cm.tab20(c))
 
     plt.xticks(rotation=90, va="bottom")
     plt.xlabel('Models')
@@ -83,38 +91,44 @@ def create_bar(metrics, col, path):
 
 def parse_metrics(path):
 
-    files = os.listdir(path)
+    dirs = os.listdir(path)
     metrics = {}
+    
+    for d in dirs:
+        if not os.path.isdir(f"{path}/{d}"):
+            continue
+        
+        files = os.listdir(f"{path}/{d}")
+        
+        for file_name in files:
+            if not  file_name.endswith(".txt"):
+                continue	
 
 
-    for file_name in files:
-        if not  file_name.endswith(".txt"):
-            continue	
-
-
-        with open(f"{path}/{file_name}", "r") as f:
-            met = {"precision": 0,
-                 "recall": 0,
-                 "f1-score": 0,
-                  "accuracy": 0}
-            f.readline()
-            f.readline()
-            for _ in range(11):
-                line = f.readline()
-                m = line.split()[1:4]
-                met["precision"]+= float(m[0])/11
-                met["recall"]   += float(m[1])/11
-                met["f1-score"] += float(m[2])/11
-            f.readline()
-            met["accuracy"] = float(f.readline().split()[1])
-            metrics[file_name]= met
-            print(file_name.split("_")[0], met)
+            with open(f"{path}/{d}/{file_name}", "r") as f:
+                met = {"precision": 0,
+                     "recall": 0,
+                     "f1-score": 0,
+                      "accuracy": 0,
+                      "directory": d}
+                f.readline()
+                f.readline()
+                for _ in range(11):
+                    line = f.readline()
+                    m = line.split()[1:4]
+                    met["precision"]+= float(m[0])/11
+                    met["recall"]   += float(m[1])/11
+                    met["f1-score"] += float(m[2])/11
+                f.readline()
+                met["accuracy"] = float(f.readline().split()[1])
+                metrics[file_name]= met
+                print(file_name.split("_")[0], met)
 
     return metrics
 
 
 if __name__=="__main__":
-    path = "./metrics/half-train"
+    path = "./metrics/"
 
     models = parse_metrics(path)
 
