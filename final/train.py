@@ -56,14 +56,14 @@ X_test  = X_test/255
 mf = model_factory(num_classes=num_classes)
 
 models = [
-    #"ConvNeXtBase",
-    #"ConvNeXtLarge",
-    #"ConvNeXtSmall",
-    #"ConvNeXtTiny",
-    #"ConvNeXtXLarge",
+    "ConvNeXtBase",
+    "ConvNeXtLarge",
+    "ConvNeXtSmall",
+    "ConvNeXtTiny",
+    "ConvNeXtXLarge",
     #"DenseNet121",
     #"DenseNet169",
-    #"DenseNet201",
+    "DenseNet201",
     #"EfficientNetB0",
     #"EfficientNetB1",
     #"EfficientNetB2",
@@ -95,7 +95,7 @@ models = [
     #"ResNet50V2",
     #"VGG16",
     #"VGG19",
-    "Xception"
+    #"Xception"
     ]
           
 
@@ -106,7 +106,7 @@ for name in models:
     #optim = Nadam(learning_rate=0.001)
     print("*"*20+f"{name}"+"*"*20)
     
-    model = mf.get_model(name, train_base=True)
+    model = mf.get_model(name, train_base=False)
     
     optim = RMSprop()
 

@@ -114,7 +114,7 @@ def parse_metrics(path):
 
 
 if __name__=="__main__":
-    path = "./metrics"
+    path = "./metrics/half-train"
 
     models = parse_metrics(path)
 
